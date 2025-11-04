@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Environmental Sustainability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            flex: 1;
+            max-width: 265px;
+        }
+
+        nav a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            font-size: 18px;
+            color: white;
+            padding: 25px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            margin: 40px auto;
+            max-width: 1400px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 40px;
+            line-height: 1.8;
+            animation: slideUp 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Video Container */
+        .video-container {
+            margin: 40px auto;
+            max-width: 1400px;
+            padding: 0 20px;
+            animation: zoomIn 1s ease-out 0.5s backwards;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        video {
+            width: 100%;
+            max-width: 1400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: 5px solid white;
+        }
+
+        video:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Feature Cards */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(151, 15, 151, 0.3);
+        }
+
+        .feature-card h3 {
+            color: #970f97;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 1.1em;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+
+            .hero-section {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Dashboards.html">Dashboards</a></li>
+            <li><a href="Reports.html">Reports</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero-section">
+        <h1>Environmental Sustainability Website</h1>
+        <p>Explore comprehensive statistical data and insights for environmental sustainability indicators. Join us in building a greener future through data-driven decisions.</p>
+    </div>
+
+    <div class="video-container">
+        <video controls autoplay muted loop>
+            <source src="https://media.istockphoto.com/id/1353384386/video/4k-sustainable-development-animated-tag-word-cloud-animation-seamless-loop.mp4?s=mp4-640x640-is&k=20&c=_yzOBWSzkYguf1JAflK1WQO-pPQeAmcJ2HqV51dI4u4=" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>📊 Data Analytics</h3>
+            <p>Access comprehensive environmental data and analytics tools for informed decision-making</p>
+        </div>
+        <div class="feature-card">
+            <h3>🌱 Sustainability Metrics</h3>
+            <p>Track key performance indicators for environmental sustainability initiatives</p>
+        </div>
+        <div class="feature-card">
+            <h3>📈 Interactive Reports</h3>
+            <p>View detailed statistical reports and visualizations of environmental trends</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Environmental Sustainability Data Analysis. All rights reserved.</p>
+    </footer>
+</body>
+</html>

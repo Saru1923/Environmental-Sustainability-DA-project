@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Analysis - Detail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            flex: 1;
+            max-width: 265px;
+        }
+
+        nav a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            font-size: 18px;
+            color: white;
+            padding: 25px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            transform: translateX(-10px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .report-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .report-number-large {
+            font-size: 5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .meta-icon {
+            font-size: 1.5em;
+        }
+
+        .content-section {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #970f97;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #970f97;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #0099ff;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .emission-sources {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .source-card {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .source-card:hover {
+            transform: translateY(-10px) rotate(-2deg);
+            box-shadow: 0 20px 50px rgba(255, 107, 107, 0.4);
+        }
+
+        .source-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .source-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .source-percentage {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .source-description {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .reduction-strategies {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .reduction-strategies ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reduction-strategies li {
+            font-size: 1.2em;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 5px solid #00d4ff;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .reduction-strategies li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 40px 0;
+            margin: 40px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .timeline-year {
+            flex-shrink: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(151, 15, 151, 0.3);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-content h4 {
+            font-size: 1.5em;
+            color: #970f97;
+            margin-bottom: 10px;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-section h2 {
+            color: white;
+            border-bottom: 3px solid white;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #0099ff;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border: none;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .report-header {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+
+            .timeline-item {
+                flex-direction: column;
+            }
+
+            .timeline-year {
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Dashboards.html">Dashboards</a></li>
+            <li><a href="Reports.html">Reports</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <a href="Reports.html" class="back-button">← Back to Reports</a>
+
+        <div id="pdfContent">
+            <div class="report-header">
+                <div class="report-number-large">02</div>
+                <h1>Carbon Footprint Analysis</h1>
+                <p style="font-size: 1.3em; color: #666;">Detailed analysis of carbon emissions and reduction strategies</p>
+                <div class="report-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span>Published: 2024</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">🌍</span>
+                        <span>Category: Carbon Analysis</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📄</span>
+                        <span>Pages: 38</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>Executive Summary</h2>
+                <p>This comprehensive Carbon Footprint Analysis report examines our organization's greenhouse gas emissions across all operational activities. Through rigorous data collection and analysis, we have identified key emission sources, quantified our carbon footprint, and developed targeted strategies to achieve significant reductions in our environmental impact.</p>
+                <p>Our analysis encompasses Scope 1, 2, and 3 emissions, providing a complete picture of our carbon impact. The findings reveal both challenges and opportunities as we work toward our ambitious goal of carbon neutrality by 2030.</p>
+
+                <h2>Emission Sources Breakdown</h2>
+                <div class="emission-sources">
+                    <div class="source-card">
+                        <div class="source-icon">🏭</div>
+                        <div class="source-title">Direct Operations</div>
+                        <div class="source-percentage">28%</div>
+                        <div class="source-description">Scope 1: On-site fuel combustion and company vehicles</div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-icon">⚡</div>
+                        <div class="source-title">Energy Consumption</div>
+                        <div class="source-percentage">35%</div>
+                        <div class="source-description">Scope 2: Purchased electricity and heating</div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-icon">🚚</div>
+                        <div class="source-title">Supply Chain</div>
+                        <div class="source-percentage">22%</div>
+                        <div class="source-description">Scope 3: Transportation and logistics</div>
+                    </div>
+                    <div class="source-card">
+                        <div class="source-icon">✈️</div>
+                        <div class="source-title">Business Travel</div>
+                        <div class="source-percentage">15%</div>
+                        <div class="source-description">Scope 3: Employee travel and commuting</div>
+                    </div>
+                </div>
+
+                <h2>Carbon Reduction Strategies</h2>
+                <div class="reduction-strategies">
+                    <ul>
+                        <li>🔋 Transition to 100% renewable energy sources by 2026</li>
+                        <li>🚗 Implement electric vehicle fleet for company transportation</li>
+                        <li>🏢 Upgrade facilities with energy-efficient HVAC and lighting systems</li>
+                        <li>💻 Promote remote work options to reduce commute emissions</li>
+                        <li>📦 Optimize supply chain logistics and packaging materials</li>
+                        <li>🌳 Invest in carbon offset projects including reforestation</li>
+                        <li>🔄 Implement circular economy principles in production processes</li>
+                        <li>📊 Deploy real-time carbon monitoring and reporting systems</li>
+                    </ul>
+                </div>
+
+                <h2>Historical Emission Trends</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-content">
+                            <h4>Baseline Year - 125,000 tCO2e</h4>
+                            <p>Established comprehensive carbon accounting methodology and baseline measurements across all operations.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2021</div>
+                        <div class="timeline-content">
+                            <h4>Initial Reductions - 118,000 tCO2e (6% decrease)</h4>
+                            <p>Implemented energy efficiency measures and began renewable energy procurement.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2022</div>
+                        <div class="timeline-content">
+                            <h4>Accelerated Progress - 105,000 tCO2e (16% decrease)</h4>
+                            <p>Launched major renewable energy initiatives and optimized supply chain operations.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2023</div>
+                        <div class="timeline-content">
+                            <h4>Significant Milestone - 88,000 tCO2e (30% decrease)</h4>
+                            <p>Achieved renewable energy milestone and implemented electric vehicle fleet.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year">2024</div>
+                        <div class="timeline-content">
+                            <h4>Current Achievement - 81,250 tCO2e (35% decrease)</h4>
+                            <p>Continued momentum with advanced carbon reduction technologies and practices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Methodology & Standards</h3>
+                <p>Our carbon footprint analysis follows internationally recognized standards including the Greenhouse Gas Protocol and ISO 14064. We employ third-party verification to ensure accuracy and credibility of our emission calculations.</p>
+
+                <h3>Future Projections</h3>
+                <p>Based on our current trajectory and planned initiatives, we project achieving a 50% reduction by 2027 and full carbon neutrality by 2030. This aggressive timeline requires continued investment in clean technologies, operational optimization, and strategic partnerships.</p>
+
+                <h3>Industry Benchmarking</h3>
+                <p>Compared to industry averages, our carbon intensity has improved significantly, placing us in the top 15% of our sector. We continue to learn from best practices and collaborate with industry leaders to accelerate decarbonization efforts.</p>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2>Download Full Report</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Access the complete Carbon Footprint Analysis with detailed emissions data and reduction roadmap</p>
+            <button class="download-btn" onclick="downloadPDF()">📥 Download PDF Report</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Environmental Sustainability Data Analysis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('pdfContent');
+            const opt = {
+                margin: 10,
+                filename: 'Carbon_Footprint_Analysis_2024.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>

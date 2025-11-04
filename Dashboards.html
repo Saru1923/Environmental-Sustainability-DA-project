@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboards - Environmental Sustainability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            flex: 1;
+            max-width: 265px;
+        }
+
+        nav a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            font-size: 18px;
+            color: white;
+            padding: 25px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-text {
+            font-size: 1.3em;
+            color: #333;
+            line-height: 1.8;
+            animation: slideUp 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Dashboard Grid using Flexbox */
+        .dashboard-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 35px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .dashboard-item {
+            flex: 1 1 calc(50% - 35px);
+            min-width: 350px;
+            max-width: 700px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            background: white;
+            padding: 20px;
+        }
+
+        .dashboard-item:hover {
+            transform: translateY(-20px) scale(1.05) rotate(1deg);
+            box-shadow: 0 30px 70px rgba(151, 15, 151, 0.5);
+            z-index: 10;
+        }
+
+        .dashboard-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+            transition: all 0.6s ease;
+            filter: brightness(0.95);
+        }
+
+        .dashboard-item:hover img {
+            transform: scale(1.15);
+            filter: brightness(1.1) saturate(1.2);
+        }
+
+        /* Overlay effect */
+        .dashboard-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(151, 15, 151, 0.85) 0%, rgba(0, 153, 255, 0.85) 100%);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            border-radius: 20px;
+            padding: 30px;
+        }
+
+        .dashboard-item:hover .dashboard-overlay {
+            opacity: 1;
+        }
+
+        .overlay-content {
+            color: white;
+            text-align: center;
+            transform: translateY(30px);
+            transition: transform 0.5s ease;
+        }
+
+        .dashboard-item:hover .overlay-content {
+            transform: translateY(0);
+        }
+
+        .overlay-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .overlay-description {
+            font-size: 1.2em;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Badge counter */
+        .dashboard-badge {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            z-index: 5;
+        }
+
+        .dashboard-item:hover .dashboard-badge {
+            transform: scale(1.2) rotate(360deg);
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .header-section {
+                padding: 30px 20px;
+            }
+
+            .dashboard-item {
+                flex: 1 1 100%;
+                min-width: 280px;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+
+            .overlay-title {
+                font-size: 1.5em;
+            }
+
+            .overlay-description {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Dashboards.html">Dashboards</a></li>
+            <li><a href="Reports.html">Reports</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Dashboard for Environmental Sustainability Data Analysis</h1>
+            <p class="intro-text">Explore interactive visualizations and gain comprehensive insights into environmental metrics. Hover over each dashboard to reveal detailed information.</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-item">
+                <div class="dashboard-badge">1</div>
+                <img src="Images5.jpg" alt="Dashboard 1">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">📊 Dashboard 1</div>
+                        <div class="overlay-description">Key Environmental Metrics Overview</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">2</div>
+                <img src="Images4.jpg" alt="Dashboard 2">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">🌱 Dashboard 2</div>
+                        <div class="overlay-description">Sustainability Performance Indicators</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">3</div>
+                <img src="Image6.jpg" alt="Dashboard 3">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">📈 Dashboard 3</div>
+                        <div class="overlay-description">Trend Analysis & Forecasting</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">4</div>
+                <img src="image7.jpg" alt="Dashboard 4">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">🌍 Dashboard 4</div>
+                        <div class="overlay-description">Global Impact Assessment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">5</div>
+                <img src="Image1.jpg" alt="Dashboard 5">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">💧 Dashboard 5</div>
+                        <div class="overlay-description">Resource Management Analytics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">6</div>
+                <img src="Image3.jpg" alt="Dashboard 6">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">♻️ Dashboard 6</div>
+                        <div class="overlay-description">Circular Economy Metrics</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-item">
+                <div class="dashboard-badge">7</div>
+                <img src="Image2.jpg" alt="Dashboard 7">
+                <div class="dashboard-overlay">
+                    <div class="overlay-content">
+                        <div class="overlay-title">🔋 Dashboard 7</div>
+                        <div class="overlay-description">Energy Efficiency Tracking</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Environmental Sustainability Data Analysis. All rights reserved.</p>
+    </footer>
+</body>
+</html>

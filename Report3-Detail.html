@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Efficiency Study - Detail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        nav {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            flex: 1;
+            max-width: 265px;
+        }
+
+        nav a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            font-size: 18px;
+            color: white;
+            padding: 25px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            transform: translateX(-10px);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.4);
+        }
+
+        .report-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .report-number-large {
+            font-size: 5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #1a1a2e;
+            margin-bottom: 20px;
+        }
+
+        .report-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        .meta-icon {
+            font-size: 1.5em;
+        }
+
+        .content-section {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 2.2em;
+            color: #970f97;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #970f97;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #0099ff;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .resource-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            padding: 35px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            text-align: center;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(76, 175, 80, 0.4);
+        }
+
+        .metric-icon {
+            font-size: 3.5em;
+            margin-bottom: 15px;
+        }
+
+        .metric-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .efficiency-initiatives {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .efficiency-initiatives ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .efficiency-initiatives li {
+            font-size: 1.2em;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border-left: 5px solid #4CAF50;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .efficiency-initiatives li:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .comparison-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #970f97;
+        }
+
+        .comparison-card h4 {
+            font-size: 1.6em;
+            color: #970f97;
+            margin-bottom: 20px;
+        }
+
+        .comparison-bar {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .comparison-fill {
+            background: linear-gradient(90deg, #4CAF50 0%, #45a049 100%);
+            height: 100%;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 15px;
+            color: white;
+            font-weight: bold;
+            transition: width 2s ease;
+        }
+
+        .best-practices {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .practice-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .practice-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        .practice-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .practice-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .practice-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .download-section {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .download-section h2 {
+            color: white;
+            border-bottom: 3px solid white;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: white;
+            color: #0099ff;
+            padding: 20px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            border: none;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            .report-header {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Dashboards.html">Dashboards</a></li>
+            <li><a href="Reports.html">Reports</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <a href="Reports.html" class="back-button">← Back to Reports</a>
+
+        <div id="pdfContent">
+            <div class="report-header">
+                <div class="report-number-large">03</div>
+                <h1>Resource Efficiency Study</h1>
+                <p style="font-size: 1.3em; color: #666;">In-depth evaluation of resource utilization and optimization opportunities</p>
+                <div class="report-meta">
+                    <div class="meta-item">
+                        <span class="meta-icon">📅</span>
+                        <span>Published: 2024</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">♻️</span>
+                        <span>Category: Resource Management</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-icon">📄</span>
+                        <span>Pages: 42</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h2>Executive Summary</h2>
+                <p>This Resource Efficiency Study presents a comprehensive evaluation of how our organization manages and optimizes critical resources including water, energy, raw materials, and waste. Through detailed analysis and benchmarking, we have identified significant opportunities to enhance operational efficiency while reducing environmental impact.</p>
+                <p>Our findings demonstrate that strategic resource management not only benefits the environment but also delivers substantial cost savings and operational improvements. This report outlines current performance metrics, best practices, and actionable recommendations for continuous improvement.</p>
+
+                <h2>Key Resource Metrics</h2>
+                <div class="resource-metrics">
+                    <div class="metric-card">
+                        <div class="metric-icon">💧</div>
+                        <div class="metric-title">Water Efficiency</div>
+                        <div class="metric-value">42%</div>
+                        <div class="metric-description">Reduction in water consumption per unit of production</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-title">Energy Optimization</div>
+                        <div class="metric-value">38%</div>
+                        <div class="metric-description">Improvement in energy efficiency compared to baseline</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📦</div>
+                        <div class="metric-title">Material Utilization</div>
+                        <div class="metric-value">68%</div>
+                        <div class="metric-description">Raw material efficiency and waste reduction rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">♻️</div>
+                        <div class="metric-title">Circular Economy</div>
+                        <div class="metric-value">75%</div>
+                        <div class="metric-description">Materials recycled or repurposed in production cycle</div>
+                    </div>
+                </div>
+
+                <h2>Efficiency Initiatives Implemented</h2>
+                <div class="efficiency-initiatives">
+                    <ul>
+                        <li>💧 Advanced water recycling systems achieving 85% reuse rate in manufacturing</li>
+                        <li>🔋 Smart building management systems optimizing HVAC and lighting</li>
+                        <li>🏭 Lean manufacturing processes reducing material waste by 45%</li>
+                        <li>🌡️ Heat recovery systems capturing and reusing thermal energy</li>
+                        <li>📊 Real-time resource monitoring with IoT sensors and analytics</li>
+                        <li>🔄 Closed-loop systems for chemical and solvent recovery</li>
+                        <li>⚙️ Equipment upgrades to high-efficiency machinery</li>
+                        <li>👥 Employee training programs on resource conservation</li>
+                    </ul>
+                </div>
+
+                <h2>Performance Comparison</h2>
+                <div class="comparison-section">
+                    <div class="comparison-card">
+                        <h4>Water Usage Efficiency</h4>
+                        <p>Before Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 100%;">100%</div>
+                        </div>
+                        <p>After Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 58%;">58%</div>
+                        </div>
+                        <p style="margin-top: 15px; font-weight: bold; color: #4CAF50;">42% Reduction Achieved</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Energy Consumption</h4>
+                        <p>Before Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 100%;">100%</div>
+                        </div>
+                        <p>After Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 62%;">62%</div>
+                        </div>
+                        <p style="margin-top: 15px; font-weight: bold; color: #4CAF50;">38% Reduction Achieved</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Material Waste</h4>
+                        <p>Before Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 100%;">100%</div>
+                        </div>
+                        <p>After Optimization</p>
+                        <div class="comparison-bar">
+                            <div class="comparison-fill" style="width: 32%;">32%</div>
+                        </div>
+                        <p style="margin-top: 15px; font-weight: bold; color: #4CAF50;">68% Reduction Achieved</p>
+                    </div>
+                </div>
+
+                <h2>Best Practices & Recommendations</h2>
+                <div class="best-practices">
+                    <div class="practice-card">
+                        <div class="practice-number">01</div>
+                        <div class="practice-title">Continuous Monitoring</div>
+                        <div class="practice-description">Implement real-time tracking systems for all major resource streams</div>
+                    </div>
+                    <div class="practice-card">
+                        <div class="practice-number">02</div>
+                        <div class="practice-title">Circular Design</div>
+                        <div class="practice-description">Design products and processes with end-of-life recovery in mind</div>
+                    </div>
+                    <div class="practice-card">
+                        <div class="practice-number">03</div>
+                        <div class="practice-title">Technology Investment</div>
+                        <div class="practice-description">Invest in cutting-edge efficiency technologies and automation</div>
+                    </div>
+                    <div class="practice-card">
+                        <div class="practice-number">04</div>
+                        <div class="practice-title">Employee Engagement</div>
+                        <div class="practice-description">Foster culture of conservation through training and incentives</div>
+                    </div>
+                </div>
+
+                <h3>Economic Benefits</h3>
+                <p>Resource efficiency initiatives have generated annual cost savings of $3.8 million while simultaneously reducing environmental impact. The return on investment for efficiency upgrades has averaged 18 months, demonstrating the strong business case for sustainable resource management.</p>
+
+                <h3>Industry Leadership</h3>
+                <p>Our resource efficiency performance places us among the top 10% of companies in our sector. We actively share best practices through industry associations and collaborate with peers to drive sector-wide improvements in resource stewardship.</p>
+
+                <h3>Future Targets</h3>
+                <p>Looking ahead, we have set ambitious targets including achieving 50% reduction in water intensity by 2026, 60% improvement in energy efficiency by 2028, and 90% material circularity by 2030. These goals align with global sustainability frameworks and demonstrate our commitment to continuous improvement.</p>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h2>Download Full Report</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Access the complete Resource Efficiency Study with detailed methodology and implementation guidelines</p>
+            <button class="download-btn" onclick="downloadPDF()">📥 Download PDF Report</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Environmental Sustainability Data Analysis. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function downloadPDF() {
+            const element = document.getElementById('pdfContent');
+            const opt = {
+                margin: 10,
+                filename: 'Resource_Efficiency_Study_2024.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+</html>

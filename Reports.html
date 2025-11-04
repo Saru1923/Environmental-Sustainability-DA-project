@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Environmental Sustainability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Navigation Styles */
+        nav {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            flex: 1;
+            max-width: 265px;
+        }
+
+        nav a {
+            display: block;
+            text-decoration: none;
+            text-align: center;
+            background: linear-gradient(135deg, #970f97 0%, #c71585 100%);
+            font-size: 18px;
+            color: white;
+            padding: 25px 20px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            transition: left 0.4s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before {
+            left: 0;
+        }
+
+        nav a:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1600px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .intro-text {
+            font-size: 1.3em;
+            color: #333;
+            line-height: 1.8;
+            animation: slideUp 0.8s ease-out 0.3s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Reports Grid using CSS Grid */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .report-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            background: white;
+            padding: 25px;
+        }
+
+        .report-card:hover {
+            transform: translateY(-25px) scale(1.08);
+            box-shadow: 0 35px 80px rgba(151, 15, 151, 0.5);
+            z-index: 10;
+        }
+
+        .report-card img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+            transition: all 0.6s ease;
+            filter: brightness(0.95) contrast(1.05);
+        }
+
+        .report-card:hover img {
+            transform: scale(1.12) rotate(-1deg);
+            filter: brightness(1.1) contrast(1.1) saturate(1.15);
+        }
+
+        /* Overlay effect */
+        .report-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(151, 15, 151, 0.9) 0%, rgba(0, 153, 255, 0.9) 100%);
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+            border-radius: 25px;
+            padding: 40px;
+        }
+
+        .report-card:hover .report-overlay {
+            opacity: 1;
+        }
+
+        .overlay-content {
+            color: white;
+            text-align: center;
+            transform: translateY(40px);
+            transition: transform 0.5s ease;
+        }
+
+        .report-card:hover .overlay-content {
+            transform: translateY(0);
+        }
+
+        .report-number {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+            opacity: 0.9;
+        }
+
+        .report-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .report-description {
+            font-size: 1.2em;
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Report Badge */
+        .report-badge {
+            position: absolute;
+            top: 35px;
+            left: 35px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            z-index: 5;
+        }
+
+        .report-card:hover .report-badge {
+            transform: scale(1.15) translateY(-5px);
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Download button effect */
+        .download-btn {
+            position: absolute;
+            bottom: 35px;
+            right: 35px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099ff 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            text-decoration: none;
+        }
+
+        .report-card:hover .download-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(151, 15, 151, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #970f97 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .header-section {
+                padding: 30px 20px;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            nav a {
+                font-size: 16px;
+                padding: 20px 10px;
+            }
+
+            .report-title {
+                font-size: 1.5em;
+            }
+
+            .report-description {
+                font-size: 1em;
+            }
+
+            .report-number {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="Dashboards.html">Dashboards</a></li>
+            <li><a href="Reports.html">Reports</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Reports for Environmental Sustainability Data Analysis</h1>
+            <p class="intro-text">Access comprehensive statistical reports and detailed analysis of our environmental sustainability projects. Hover over each report to view details and download options.</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">Total Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Data Points</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2024</div>
+                <div class="stat-label">Latest Year</div>
+            </div>
+        </div>
+
+        <div class="reports-grid">
+            <div class="report-card">
+                <div class="report-badge">📊 Report 1</div>
+                <img src="Image8.jpg" alt="Statistical Report 1">
+                <div class="report-overlay">
+                    <div class="overlay-content">
+                        <div class="report-number">01</div>
+                        <div class="report-title">Annual Sustainability Report</div>
+                        <div class="report-description">Comprehensive overview of environmental performance metrics and achievements</div>
+                    </div>
+                    <a href="Report1-Detail.html" class="download-btn">View Details →</a>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="report-badge">📈 Report 2</div>
+                <img src="Image9.jpg" alt="Statistical Report 2">
+                <div class="report-overlay">
+                    <div class="overlay-content">
+                        <div class="report-number">02</div>
+                        <div class="report-title">Carbon Footprint Analysis</div>
+                        <div class="report-description">Detailed analysis of carbon emissions and reduction strategies</div>
+                    </div>
+                    <a href="Report2-Detail.html" class="download-btn">View Details →</a>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="report-badge">🌱 Report 3</div>
+                <img src="Image10.jpg" alt="Statistical Report 3">
+                <div class="report-overlay">
+                    <div class="overlay-content">
+                        <div class="report-number">03</div>
+                        <div class="report-title">Resource Efficiency Study</div>
+                        <div class="report-description">In-depth evaluation of resource utilization and optimization opportunities</div>
+                    </div>
+                    <a href="Report3-Detail.html" class="download-btn">View Details →</a>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <div class="report-badge">🌍 Report 4</div>
+                <img src="Image11.jpg" alt="Statistical Report 4">
+                <div class="report-overlay">
+                    <div class="overlay-content">
+                        <div class="report-number">04</div>
+                        <div class="report-title">Impact Assessment Report</div>
+                        <div class="report-description">Comprehensive environmental impact analysis and future projections</div>
+                    </div>
+                    <a href="Report4-Detail.html" class="download-btn">View Details →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Environmental Sustainability Data Analysis. All rights reserved.</p>
+    </footer>
+</body>
+</html>
